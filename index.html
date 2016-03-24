@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>DOMSnap</title>
+  <meta name="description" content="Offline web pages by persisting DOM to IndexedDB/WebSQL" />
+  <meta name="keywords" content="DOMSnap, offline">
+  <style>
+    body {
+      background-color: #fff;
+      box-sizing: border-box;
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    }
+    [contenteditable]{
+      width: 95%;
+      height: 200px;
+      margin: 10px;
+      border: solid 1px gray;
+      background-color: #ccc;
+    }
+    @media screen and (min-width: 832px) {
+      body {
+        width: 800px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body ontuchstart="">
+  <main id="main">
+    <h1>DOMSnap</h1>
+    <h4>This sample demonstrates DOMSnap.</h4>
+    <h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>
+    <p contenteditable="true">
+      Please type something at here and click Capture to take a snapshot of this page.Then just reload it and click Resume to see what you just typed.
+    </p>
+    <button onclick="capture()">Capture</button>
+    <button onclick="resume()">Resume</button>
+  </main>
+  <script src="dist/DOMSnap.min.js"></script>
+  <script>
+    var DS = DOMSnap(function () {
+      console.log('DOMSnap is ready');
+    });
+    function capture(){
+      DS.capture('#main');
+      console.log('captured');
+    }
+    function resume(){
+      DS.resume('#main');
+      console.log('resumed');
+    }
+  </script>
+</body>
+</html>

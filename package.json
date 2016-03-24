@@ -1,0 +1,33 @@
+{
+  "name": "DOMSnap",
+  "version": "0.0.1",
+  "description": "Offline web pages by persisting DOM to IndexedDB/WebSQL.",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": "unbug/DOMSnap",
+  "author": {
+    "name": "unbug",
+    "email": "tidelgl@gmail.com",
+    "url": "https://github.com/unbug"
+  },
+  "keywords": [
+    "DOMSnap",
+    "offline",
+    "lovefiled",
+    "IndexedDB",
+    "WebSQL"
+  ],
+  "dependencies": {
+    "lovefield": "^2.1.7"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-size": "^2.1.0",
+    "gulp-uglify": "^1.5.3",
+    "run-sequence": "^1.1.5",
+    "webpack": "^1.12.14",
+    "webpack-stream": "^3.1.0"
+  }
+}
