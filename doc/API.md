@@ -35,7 +35,7 @@ var DS = DOMSnap(function(){
 //capture snapshot html of #main
 DS.capture('#main');
 //capture with specified capture id
-DS.capture('#main','my_id);
+DS.capture('#main','my_id');
 
 //set the html of #main by it's captured snapshot html
 DS.resume('#main');
