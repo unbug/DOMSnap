@@ -20,7 +20,16 @@ Usage
 
 ```
 
-2. Examples
+2. Or insttall the package and require it in your files
+```
+npm install --save domsnap
+```
+then
+```
+var DOMSnap = require('DOMSnap');
+```
+
+***Examples***
 
 ```javascript
 //init DOMSnap
