@@ -17,7 +17,7 @@ Usage
 =========
 1.Include [`dist/DOMSnap.min.js`](https://github.com/unbug/DOMSnap/tree/master/dist) file in your HTML:
 ```
-<script src="DOMSnap.min.js">
+<script src="DOMSnap.min.js"></script>
 
 ```
 
