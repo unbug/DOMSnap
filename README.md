@@ -23,6 +23,7 @@ DS.resume('#main');
 DS.resume('#main','my_id');
 ```
 Please try the [demo](http://unbug.github.io/DOMSnap/).
+
 ![domsnap](https://cloud.githubusercontent.com/assets/799578/14041602/91577d80-f2ad-11e5-806e-19ef26a25a38.gif)
 
 APIs
