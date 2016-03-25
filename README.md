@@ -1,18 +1,9 @@
 DOMSnap
 =================
-Offline web pages by persisting DOM to IndexedDB/WebSQL.Please try the [demo](http://unbug.github.io/DOMSnap/).
+Offline web pages by persisting DOM to IndexedDB/WebSQL.
 
-![domsnap](https://cloud.githubusercontent.com/assets/799578/14041602/91577d80-f2ad-11e5-806e-19ef26a25a38.gif)
-
-APIs
+Usage
 =========
-### DOMSnap
-
-**Parameters**
-
--   `config`  [optional]
--   `readyCallback` **function** will be called when DOMSnap is ready
-
 **Examples**
 
 ```javascript
@@ -31,10 +22,21 @@ DS.resume('#main');
 //set by specified capture id
 DS.resume('#main','my_id');
 ```
+Please try the [demo](http://unbug.github.io/DOMSnap/).
+![domsnap](https://cloud.githubusercontent.com/assets/799578/14041602/91577d80-f2ad-11e5-806e-19ef26a25a38.gif)
+
+APIs
+=========
+### DOMSnap
+
+**Parameters**
+
+-   `config`  [optional]
+-   `readyCallback` **function** will be called when DOMSnap is ready
 
 Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 
-### capture
+### .capture
 
 capture snapshot html of the element matches the selector and store the result with a capture id
 
@@ -45,7 +47,7 @@ capture snapshot html of the element matches the selector and store the result w
 
 Returns **object** DOMSnap
 
-### resume
+### .resume
 
 set the html of the element matches the selector [and capture id] by it's captured snapshot html
 
@@ -58,7 +60,7 @@ set the html of the element matches the selector [and capture id] by it's captur
 Returns **object** DOMSnap
 
 
-### get
+### .get
 
 retrun the captured snapshot html of the element matches the selector and capture id
 
@@ -69,7 +71,7 @@ retrun the captured snapshot html of the element matches the selector and captur
 
 Returns **string** html
 
-### getAll
+### .getAll
 
 retrun all the captured snapshots html of the element matches the selector
 
@@ -79,7 +81,7 @@ retrun all the captured snapshots html of the element matches the selector
 
 Returns **object** all snapshots as object - e.g. {DEFAULT_CAPTURE_ID: 'html of DEFAULT_CAPTURE', my_id: 'html of my_id'}
 
-### remove
+### .remove
 
 remove the captured snapshot html of the element matches the selector [and capture id]
 
@@ -90,7 +92,7 @@ remove the captured snapshot html of the element matches the selector [and captu
 
 Returns **object** DOMSnap
 
-### clear
+### .clear
 
 clear all captured snapshots
 
