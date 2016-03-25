@@ -14,13 +14,13 @@ Think offline is a long way out, why not just give DOMSnap a try?
 
 Usage
 =========
-1. Include [`dist/DOMSnap.min.js`](https://github.com/unbug/DOMSnap/tree/master/dist) file in your HTML:
+1.Include [`dist/DOMSnap.min.js`](https://github.com/unbug/DOMSnap/tree/master/dist) file in your HTML:
 ```
 <script src="DOMSnap.min.js">
 
 ```
 
-2. Or insttall the package and require it in your files
+2.Or insttall the package and require it in your files
 ```
 npm install --save domsnap
 ```
