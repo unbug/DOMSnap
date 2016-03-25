@@ -27,7 +27,7 @@ npm install --save domsnap
 ```
 then
 ```
-var DOMSnap = require('DOMSnap');
+var DOMSnap = require('domsnap');
 ```
 
 ***Examples***
