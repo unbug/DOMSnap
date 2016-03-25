@@ -17,7 +17,7 @@
       height: 200px;
       margin: 10px;
       border: solid 1px gray;
-      background-color: #ccc;
+      background-color: #efef8f;
     }
     @media screen and (min-width: 832px) {
       body {
@@ -35,21 +35,25 @@
     <div contenteditable="true">
       Please type something at here and click Capture to take a snapshot of this page.Then just reload it and click Resume to see what you just typed.
     </div>
-    <button onclick="capture()">Capture</button>
-    <button onclick="resume()">Resume</button>
-    <a href="https://github.com/unbug/DOMSnap">Fork me on Github</a>
   </main>
+  <button onclick="capture()">Capture</button>
+  <button onclick="capture(2)">Capture 2</button>
+  <button onclick="capture(3)">Capture 3</button>
+  <button onclick="resume()">Resume</button>
+  <button onclick="resume(2)">Resume 2</button>
+  <button onclick="resume(3)">Resume 3</button>
+  <a href="https://github.com/unbug/DOMSnap">Fork me on Github</a>
   <script src="dist/DOMSnap.min.js"></script>
   <script>
     var DS = DOMSnap(function () {
       console.log('DOMSnap is ready');
     });
-    function capture(){
-      DS.capture('#main');
+    function capture(id){
+      DS.capture('#main',id);
       console.log('captured');
     }
-    function resume(){
-      DS.resume('#main');
+    function resume(id){
+      DS.resume('#main',id);
       console.log('resumed');
     }
   </script>

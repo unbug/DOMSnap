@@ -45,97 +45,39 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Util = __webpack_require__(1);
+	var SnapCache = __webpack_require__(3);
 	var DB = __webpack_require__(2);
 
-	/**
-	 * Offline web pages by persisting DOM to IndexedDB/WebSQL
-	 */
-
-	var DOMSnap,
+	var DS,
 	  CONFIG = {},
-	  snapCache = {},
+	  capId = 'DEFAULT_CAPTURE_ID',
+	  cache = new SnapCache(),
 	  snapDB;
 
-	function _$(cls){
-	  return document.querySelector(cls);
-	}
-	/**
-	 * retrun the captured snapshot html of the element matches the selector
-	 *
-	 * @param selector ,selector of the element
-	 * @returns html
-	 */
-	function get(selector) {
-	  return snapCache[selector];
-	}
-
 	/**
 	 *
-	 * remove the captured snapshot html of the element matches the selector
+	 * Offline web pages by persisting DOM to IndexedDB/WebSQL
+	 * @constructor
+	 * @param config - [optional]
+	 * @param {function} readyCallback - will be called when DOMSnap is ready
+	 * @returns {object} {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
+	 * @example
+	 * //init DOMSnap
+	 * var DS = DOMSnap(function(){
+	 *   console.log('DOMSnap is ready');
+	 * });
 	 *
-	 * @param selector ,selector of the element
-	 * @returns DOMSnap
+	 * //capture snapshot html of #main
+	 * DS.capture('#main');
+	 * //capture with specified capture id
+	 * DS.capture('#main','my_id);
+	 *
+	 * //set the html of #main by it's captured snapshot html
+	 * DS.resume('#main');
+	 * //set by specified capture id
+	 * DS.resume('#main','my_id');
 	 */
-	function remove(selector) {
-	  snapCache[selector] = null;
-	  delete snapCache[selector];
-	  snapDB.delete(selector);
-	  return DOMSnap;
-	}
-
-	/**
-	 *
-	 * capture snapshot html of the element matches the selector
-	 *
-	 * @param selector ,selector of the element
-	 * @returns DOMSnap
-	 */
-	function capture(selector) {
-	  var snap = _$(selector).innerHTML;
-	  snapCache[selector] = snap;
-	  snapDB.add(selector,snap);
-	  return DOMSnap;
-	}
-
-	/**
-	 *
-	 * set the html of the element matches the selector by it's captured snapshot html
-	 *
-	 * @param selector
-	 * @param fallback
-	 * @returns {*}
-	 */
-	function resume(selector,fallback) {
-	  var snap = get(selector);
-	  if(snap!==undefined || snap!==null){
-	    _$(selector).innerHTML = snap;
-	  }else{
-	    fallback && fallback();
-	  }
-	  return DOMSnap;
-	}
-
-	/**
-	 *
-	 * clear all captured snapshots
-	 *
-	 * @returns DOMSnap
-	 */
-	function clear() {
-	  snapDB.deleteAll();
-	  snapCache = {};
-	  return DOMSnap;
-	}
-
-	DOMSnap =  {
-	  get: get,
-	  remove: remove,
-	  capture: capture,
-	  resume: resume,
-	  clear: clear
-	};
-
-	function init(config,readyCallback) {
+	function DOMSnap(config,readyCallback) {
 	  if(typeof config == 'function'){
 	    readyCallback = config;
 	  }else{
@@ -144,16 +86,121 @@
 	  snapDB = new DB(CONFIG.DBName,function(){
 	    snapDB.getAll(function(rows){
 	      rows.forEach(function (key) {
-	        snapCache[key.selector] = key.htm;
+	        cache.set(key.selector, key.capture_id, key.htm);
 	      });
-	      readyCallback && readyCallback(DOMSnap);
+	      readyCallback && readyCallback(DS);
 	    });
 	  });
-	  return DOMSnap;
+	  return DS;
 	}
 
-	window.DOMSnap = init;
-	module.exports = init;
+	function _id(id){
+	  return Util.isNil(id)? capId: id;
+	}
+
+	/**
+	 *
+	 * capture snapshot html of the element matches the selector and store the result with a capture id
+	 *
+	 * @method
+	 * @param {string} selector - selector of the element
+	 * @param {string} id - [optional]capture id
+	 * @returns {object} DOMSnap
+	 */
+	function capture(selector, id) {
+	  var htm = Util.el(selector).innerHTML;
+	  id = _id(id);
+	  cache.set(selector, id, htm);
+	  snapDB.add(selector, id, htm);
+	  return DS;
+	}
+
+	/**
+	 *
+	 * set the html of the element matches the selector [and capture id] by it's captured snapshot html
+	 *
+	 * @function
+	 * @param {string} selector - selector of the element
+	 * @param {string} id - [optional]capture id, the result will be the default snapshot if it's not specified
+	 * @param {function} fallback - [optional]a callback function, will be called if no snapshot matched
+	 * @returns {object} DOMSnap
+	 */
+	function resume(selector, id, fallback) {
+	  if(Util.isFunction(id)){
+	    fallback = id;
+	  }
+	  id = _id(id);
+	  var htm = get(selector, id);
+	  if(!Util.isNil(htm)){
+	    Util.el(selector).innerHTML = htm;
+	  }else{
+	    fallback && fallback();
+	  }
+	  return DS;
+	}
+
+
+	/**
+	 * retrun the captured snapshot html of the element matches the selector and capture id
+	 *
+	 * @param {string} selector - selector of the element
+	 * @param {string} id - [optional]capture id, the result be the default snapshot if it's not specified
+	 * @returns {string} html
+	 */
+	function get(selector, id) {
+	  return cache.get(selector, id);
+	}
+
+	/**
+	 * retrun all the captured snapshots html of the element matches the selector
+	 *
+	 * @function
+	 * @param {string} selector - selector of the element
+	 * @returns {object} all snapshots as object - e.g. {DEFAULT_CAPTURE_ID: 'html of DEFAULT_CAPTURE', my_id: 'html of my_id'}
+	 */
+	function getAll(selector) {
+	  return cache.get(selector);
+	}
+
+	/**
+	 *
+	 * remove the captured snapshot html of the element matches the selector [and capture id]
+	 *
+	 * @function
+	 * @param {string} selector - selector of the element
+	 * @param {string} id - [optional]capture id, will empty all snapshots if it's not specified
+	 * @returns {object} DOMSnap
+	 */
+	function remove(selector, id) {
+	  cache.del(selector, id);
+	  snapDB.delete(selector, id);
+	  return DS;
+	}
+
+	/**
+	 *
+	 * clear all captured snapshots
+	 *
+	 * @function
+	 * @returns {object} DOMSnap
+	 */
+	function clear() {
+	  snapDB.deleteAll();
+	  cache.empty();
+	  return DS;
+	}
+
+	DS =  {
+	  capture: capture,
+	  resume: resume,
+	  get: get,
+	  getAll: getAll,
+	  remove: remove,
+	  clear: clear
+	};
+
+	window.DOMSnap = DOMSnap;
+	module.exports = DOMSnap;
 
 
 /***/ },
@@ -172,8 +219,17 @@
 	if (ipad) os.ios = os.ipad = true, os.version = ipad[2].replace(/_/g, '.')
 	if (ipod) os.ios = os.ipod = true, os.version = ipod[3] ? ipod[3].replace(/_/g, '.') : null;
 	exports.os = os;
+
+	exports.isNil = function isNil(val) {
+	  return val==undefined || val == null || val==false;
+	}
+
+	exports.isFunction = function isFunction(val) {
+	  return typeof val=='function';
+	}
+
 	exports.apply = function apply(obj, config, promise) {
-	  var conf = typeof config=='function'?config.call(obj):config;
+	  var conf = isFunction(config)?config.call(obj):config;
 	  if (conf) {
 	    var attr;
 	    for (attr in conf) {
@@ -182,23 +238,28 @@
 	  }
 	}
 
+	exports.el = function el(cls){
+	  return document.querySelector(cls);
+	}
+
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Util = __webpack_require__(1);
-	var lovefield = __webpack_require__(3);
+	var lovefield = __webpack_require__(4);
 	var lf = lf || lovefield;
 
 	module.exports = function (name,callback){
-	  var schemaBuilder = lf.schema.create(name||'DOMSnap_DB', 2),
+	  var schemaBuilder = lf.schema.create(name||'DOMSnap_DB', 3),
 	    DB,Table;
 
 	  schemaBuilder
 	    .createTable('Snap')
 	    .addColumn('id', lf.Type.INTEGER)
 	    .addColumn('selector', lf.Type.STRING)
+	    .addColumn('capture_id', lf.Type.STRING)
 	    .addColumn('htm', lf.Type.OBJECT)
 	    .addColumn('create', lf.Type.DATE_TIME)
 	    .addPrimaryKey(['id'], true);
@@ -211,10 +272,11 @@
 	    callback && callback();
 	  });
 
-	  this.add = function (selector, htm) {
-	    selector && this.delete(selector,function(){
+	  this.add = function (selector, capture_id, htm) {
+	    !Util.isNil(selector) && !Util.isNil(capture_id) && this.delete(selector, capture_id,function(){
 	      var row = Table.createRow({
 	        'selector': selector,
+	        'capture_id': capture_id,
 	        'htm': htm,
 	        'create': new Date()
 	      });
@@ -223,10 +285,15 @@
 	    });
 	  }
 
-	  this.getBySelector = function (selector,callback) {
-	    DB.select().from(Table).where(Table.selector.eq(selector))
-	      .exec().then(function (rows) {
-	      callback && callback(rows);
+	  this.delete = function (selector, capture_id, callback) {
+	    DB.delete()
+	      .from(Table)
+	      .where(lf.op.and(
+	        Table.selector.eq(selector),
+	        Table.capture_id.eq(capture_id)
+	      ))
+	      .exec().then(function () {
+	      callback && callback();
 	    });
 	  }
 
@@ -236,14 +303,6 @@
 	      .orderBy(Table.id, lf.Order.DESC)
 	      .exec().then(function (rows) {
 	      callback && callback(rows);
-	    });
-	  }
-	  this.delete = function (selector,callback) {
-	    DB.delete()
-	      .from(Table)
-	      .where(Table.selector.eq(selector))
-	      .exec().then(function () {
-	      callback && callback();
 	    });
 	  }
 
@@ -257,6 +316,49 @@
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Util = __webpack_require__(1);
+
+	function SnapCache() {
+	  var cache = {};
+
+	  this.get = function (id,childId) {
+	    return cache[id]
+	      ?(Util.isNil(childId)
+	        ?cache[id]
+	        :cache[id][childId])
+	      :null;
+	  }
+
+	  this.set = function(id,childId,body){
+	    if(!Util.isNil(id) && !Util.isNil(childId) && !Util.isNil(body)){
+	      cache[id] = cache[id] || {};
+	      cache[id][childId] = body;
+	    }
+	  }
+
+	  this.del = function (id,childId) {
+	    if(cache[id]){
+	      if(Util.isNil(childId)){
+	        cache[id] = null;
+	        delete cache[id];
+	      }else{
+	        cache[id][childId] = null;
+	        delete cache[id][childId];
+	      }
+	    }
+	  }
+
+	  this.empty = function() {
+	    cache = {};
+	  }
+	}
+	module.exports = SnapCache;
+
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {if(!self.window){window=self;}
@@ -537,10 +639,10 @@
 	try{if(module){module.exports=lf;}}catch(e){}}.bind(window))()
 	//# sourceMappingURL=lovefield.min.js.map
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {

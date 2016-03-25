@@ -23,6 +23,27 @@ gulp.task('min', function () {
     .pipe($.size({title: 'min'}));
 });
 
+//build doc
+gulp.task('doc', function () {
+  gulp.src('./lib/DOMSnap.js')
+    .pipe($.documentation({ format: 'md'}))
+    .pipe(gulp.dest('./doc'));
+});
+
+
+//watching script change to start default task
+gulp.task('watch', function () {
+  return gulp.watch(['lib/**/*.js'], function (event) {
+    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+    runSequence('dist');
+  });
+});
+
+//buid and dist lib
+gulp.task('dist', function (cb) {
+  runSequence('build', 'min', 'doc', cb);
+});
+
 gulp.task('default', function (cb) {
-  runSequence('build', 'min', cb);
+  runSequence('dist', 'watch', cb);
 });

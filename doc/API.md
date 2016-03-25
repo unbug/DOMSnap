@@ -1,11 +1,20 @@
-DOMSnap
-=================
-Offline web pages by persisting DOM to IndexedDB/WebSQL.Please try the [demo](http://unbug.github.io/DOMSnap/).
+# capture
 
-![domsnap](https://cloud.githubusercontent.com/assets/799578/14041477/34a28b58-f2ac-11e5-9109-30a2e5599bbb.gif)
+capture snapshot html of the element matches the selector and store the result with a capture id
 
-Doc
-=========
+**Parameters**
+
+-   `selector` **string** selector of the element
+-   `id` **string** [optional]capture id
+
+Returns **object** DOMSnap
+
+# clear
+
+clear all captured snapshots
+
+Returns **object** DOMSnap
+
 # DOMSnap
 
 Offline web pages by persisting DOM to IndexedDB/WebSQL
@@ -36,36 +45,6 @@ DS.resume('#main','my_id');
 
 Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 
-# capture
-
-capture snapshot html of the element matches the selector and store the result with a capture id
-
-**Parameters**
-
--   `selector` **string** selector of the element
--   `id` **string** [optional]capture id
-
-Returns **object** DOMSnap
-
-# resume
-
-set the html of the element matches the selector [and capture id] by it's captured snapshot html
-
-**Parameters**
-
--   `selector` **string** selector of the element
--   `id` **string** [optional]capture id, the result will be the default snapshot if it's not specified
--   `fallback` **function** [optional]a callback function, will be called if no snapshot matched
-
-Returns **object** DOMSnap
-
-# clear
-
-clear all captured snapshots
-
-Returns **object** DOMSnap
-
-
 # get
 
 retrun the captured snapshot html of the element matches the selector and capture id
@@ -95,5 +74,17 @@ remove the captured snapshot html of the element matches the selector [and captu
 
 -   `selector` **string** selector of the element
 -   `id` **string** [optional]capture id, will empty all snapshots if it's not specified
+
+Returns **object** DOMSnap
+
+# resume
+
+set the html of the element matches the selector [and capture id] by it's captured snapshot html
+
+**Parameters**
+
+-   `selector` **string** selector of the element
+-   `id` **string** [optional]capture id, the result will be the default snapshot if it's not specified
+-   `fallback` **function** [optional]a callback function, will be called if no snapshot matched
 
 Returns **object** DOMSnap
