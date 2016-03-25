@@ -1,6 +1,7 @@
 DOMSnap
 =================
 Offline web pages by persisting DOM to IndexedDB/WebSQL.
+Please try the [demo](http://unbug.github.io/DOMSnap/).
 
 How it works
 ============= 
@@ -47,7 +48,6 @@ DS.resume('#main');
 //set by specified capture id
 DS.resume('#main','my_id');
 ```
-Please try the [demo](http://unbug.github.io/DOMSnap/).
 
 ![domsnap](https://cloud.githubusercontent.com/assets/799578/14041602/91577d80-f2ad-11e5-806e-19ef26a25a38.gif)
 
