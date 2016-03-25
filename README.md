@@ -2,9 +2,25 @@ DOMSnap
 =================
 Offline web pages by persisting DOM to IndexedDB/WebSQL.
 
+How it works
+============= 
+HTML5 provides LocalStorage, IndexedDB, and [window.caches](https://googlechrome.github.io/samples/service-worker/window-caches/) to build offline web apps.
+But all of [these technologies](http://www.html5rocks.com/en/features/offline), we can't miss local database.
+DOMSnap takes full advantage of [offline technologies](http://www.html5rocks.com/en/features/offline).
+Storing HTML to local IndexedDB/WebSQL and resumeing when you're offline.
+With DOMSnap, web pages can resume to their last state with less request to the server and less template render.
+Think offline is a long way out, why not just give DOMSnap a try?
+
+
 Usage
 =========
-**Examples**
+1. Include [`dist/DOMSnap.min.js`](https://github.com/unbug/DOMSnap/tree/master/dist) file in your HTML:
+```
+<script src="DOMSnap.min.js">
+
+```
+
+2. Examples
 
 ```javascript
 //init DOMSnap
@@ -98,3 +114,14 @@ Returns **object** DOMSnap
 clear all captured snapshots
 
 Returns **object** DOMSnap
+
+
+Thanks
+=================
+  * [Google Lovefield](https://github.com/google/lovefield)
+  
+
+Find me
+=================
+  * Twitter [@unbug](https://twitter.com/unbug)
+  * 微博 [@听奏](http://weibo.com/unbug)
