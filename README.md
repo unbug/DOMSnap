@@ -4,7 +4,7 @@ Offline web pages by persisting DOM to IndexedDB/WebSQL.Please try the [demo](ht
 
 ![domsnap](https://cloud.githubusercontent.com/assets/799578/14041602/91577d80-f2ad-11e5-806e-19ef26a25a38.gif)
 
-Doc
+APIs
 =========
 ### DOMSnap
 
