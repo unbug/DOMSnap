@@ -143,12 +143,17 @@ Build
 1. install requirements run ```npm install```
 2. build and watch run ```gulp```
 
-Thanks
-=================
-  * [Google Lovefield](https://github.com/google/lovefield)
-  
-
 Find me
 =================
   * Twitter [@unbug](https://twitter.com/unbug)
   * 微博 [@听奏](http://weibo.com/unbug)
+  
+Dependencies
+=================
+  * [Google Lovefield](https://github.com/google/lovefield)
+  
+LICENSE
+=========
+The MIT License (MIT)
+Copyright (c) <2016> <unbug>
+[MIT](http://opensource.org/licenses/mit-license.php)
