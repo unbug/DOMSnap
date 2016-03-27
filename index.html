@@ -36,12 +36,12 @@
       Please type something at here and click Capture to take a snapshot of this page.Then just reload it and click Resume to see what you just typed.
     </div>
   </main>
-  <button onclick="capture()">Capture</button>
-  <button onclick="capture(2)">Capture 2</button>
-  <button onclick="capture(3)">Capture 3</button>
-  <button onclick="resume()">Resume</button>
-  <button onclick="resume(2)">Resume 2</button>
-  <button onclick="resume(3)">Resume 3</button>
+  <button onclick="capture()" title="Capture for default">Capture</button>
+  <button onclick="capture(2)" title="Capture with specified id 2">Capture 2</button>
+  <button onclick="preCapture()" title="Capture with specified html">Pre-Capture</button>
+  <button onclick="resume()" title="Resume default">Resume</button>
+  <button onclick="resume(2)" title="Resume Capture 2">Resume 2</button>
+  <button onclick="resume('pre_id')" title="Resume Pre-Capture">Resume Pre</button>
   <a href="https://github.com/unbug/DOMSnap">Fork me on Github</a>
   <script src="dist/DOMSnap.min.js"></script>
   <script>
@@ -50,6 +50,14 @@
     });
     function capture(id){
       DS.capture('#main',id);
+      console.log('captured');
+    }
+    function preCapture(){
+      DS.capture('#main','pre_id','' +
+        '<h1>DOMSnap</h1>'+
+        '<h4>This sample demonstrates DOMSnap.</h4>'+
+        '<h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>'+
+        '<div contenteditable="true">This content was pre rendered</div>');
       console.log('captured');
     }
     function resume(id){

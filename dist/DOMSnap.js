@@ -107,11 +107,12 @@
 	 *
 	 * @function
 	 * @param {string} selector - selector of the element
-	 * @param {string} id - [optional]capture id
+	 * @param {string} id - [optional]capture id, if html is not null set id to null to store html as the default snapshot
+	 * @param {string} html - [optional]snapshot html, set id to null to store html as the default snapshot
 	 * @returns {object} DOMSnap
 	 */
-	function capture(selector, id) {
-	  var htm = Util.el(selector).innerHTML;
+	function capture(selector, id, html) {
+	  var htm = Util.isNil(html)?Util.html(selector):html;
 	  id = _id(id);
 	  cache.set(selector, id, htm);
 	  snapDB.add(selector, id, htm);
@@ -135,11 +136,8 @@
 	  }
 	  id = _id(id);
 	  var htm = get(selector, id);
-	  if(!Util.isNil(htm)){
-	    Util.el(selector).innerHTML = htm;
-	  }else{
-	    fallback && fallback();
-	  }
+	  Util.html(selector, htm);
+	  fallback && Util.isNil(htm) && fallback();
 	  return DS;
 	}
 
@@ -228,17 +226,16 @@
 	if (iphone && !ipod) os.ios = os.iphone = true, os.version = iphone[2].replace(/_/g, '.')
 	if (ipad) os.ios = os.ipad = true, os.version = ipad[2].replace(/_/g, '.')
 	if (ipod) os.ios = os.ipod = true, os.version = ipod[3] ? ipod[3].replace(/_/g, '.') : null;
-	exports.os = os;
 
-	exports.isNil = function isNil(val) {
+	function isNil(val) {
 	  return val==undefined || val == null || val==false;
 	}
 
-	exports.isFunction = function isFunction(val) {
+	function isFunction(val) {
 	  return typeof val=='function';
 	}
 
-	exports.apply = function apply(obj, config, promise) {
+	function apply(obj, config, promise) {
 	  var conf = isFunction(config)?config.call(obj):config;
 	  if (conf) {
 	    var attr;
@@ -248,9 +245,26 @@
 	  }
 	}
 
-	exports.el = function el(cls){
-	  return document.querySelector(cls);
+	function el(selector){
+	  return document.querySelector(selector);
 	}
+
+	function html(selector, htm){
+	  var ele = el(selector);
+	  return isNil(htm)?ele.innerHTML:(ele.innerHTML = htm);
+	  if(isNil(htm)){
+	    return ele.innerHTML;
+	  }else{
+	    ele.innerHTML = htm;
+	  }
+	}
+
+	exports.os = os;
+	exports.isNil = isNil;
+	exports.isFunction = isFunction;
+	exports.apply = apply;
+	exports.el = el;
+	exports.html = html;
 
 
 /***/ },
