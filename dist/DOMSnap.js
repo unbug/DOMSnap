@@ -111,7 +111,7 @@
 	 * @param {string} selector - selector of the element
 	 * @param {string} id - [optional]capture id, if html is not null set id to null to store html as the default snapshot
 	 * @param {string} html - [optional]snapshot html, set id to null to store html as the default snapshot
-	 * @returns {object} DOMSnap
+	 * @returns {DOMSnap}
 	 */
 	function capture(selector, id, html) {
 	  var htm = Util.isNil(html)?Util.html(selector):html;
@@ -130,7 +130,7 @@
 	 * @param {string} selector - selector of the element
 	 * @param {string} id - [optional]capture id, the result will be the default snapshot if it's not specified
 	 * @param {function} fallback - [optional]a callback function, will be called if no snapshot matched
-	 * @returns {object} DOMSnap
+	 * @returns {DOMSnap}
 	 */
 	function resume(selector, id, fallback) {
 	  if(Util.isFunction(id)){
@@ -147,7 +147,7 @@
 	 * .watch(selector)
 	 * watch and auto capture the element matches the selector
 	 * @param {string} selector - selector - selector of the element
-	 * @returns {object} DOMSnap
+	 * @returns {DOMSnap}
 	 */
 	function watch(selector) {
 	  oWatcher.watch(selector,function(){
@@ -191,7 +191,7 @@
 	 * @function
 	 * @param {string} selector - selector of the element
 	 * @param {string} id - [optional]capture id, will empty all snapshots if it's not specified
-	 * @returns {object} DOMSnap
+	 * @returns {DOMSnap}
 	 */
 	function remove(selector, id) {
 	  oSnapCache.del(selector, id);
@@ -205,7 +205,7 @@
 	 * clear all captured snapshots
 	 *
 	 * @function
-	 * @returns {object} DOMSnap
+	 * @returns {DOMSnap}
 	 */
 	function clear() {
 	  snapDB.deleteAll();

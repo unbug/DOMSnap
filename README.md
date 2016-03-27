@@ -65,7 +65,7 @@ Initialize DOMSnap
 -   `readyCallback` **function** will be called when DOMSnap is ready
 
 
-Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
+Returns **DOMSnap** - {capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}
 
 ============
 ### .capture(selector, id, html)
@@ -89,7 +89,7 @@ set the html of the element matches the selector [and capture id] by it's captur
 -   `id` **string** [optional]capture id, the result will be the default snapshot if it's not specified
 -   `fallback` **function** [optional]a callback function, will be called if no snapshot matched
 
-Returns **object** DOMSnap
+Returns **DOMSnap** 
 
 ============
 ### .watch(selector)
@@ -100,7 +100,7 @@ watch and auto capture the element matches the selector
 
 -   `selector` **string** selector - selector of the element
 
-Returns **object** DOMSnap
+Returns **DOMSnap** 
 
 ============
 ### .get(selector, id)
@@ -135,14 +135,14 @@ remove the captured snapshot html of the element matches the selector [and captu
 -   `selector` **string** selector of the element
 -   `id` **string** [optional]capture id, will empty all snapshots if it's not specified
 
-Returns **object** DOMSnap
+Returns **DOMSnap** 
 
 ============
 ### .clear()
 
 clear all captured snapshots
 
-Returns **object** DOMSnap
+Returns **DOMSnap** 
 
 Build
 =================
