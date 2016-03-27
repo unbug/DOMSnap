@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/domsnap.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/domsnap/)
+
 DOMSnap
 =================
 Offline web pages by persisting DOM to IndexedDB/WebSQL.
