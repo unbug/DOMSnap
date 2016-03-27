@@ -155,5 +155,7 @@ Dependencies
 LICENSE
 =========
 The MIT License (MIT)
+
 Copyright (c) <2016> <unbug>
+
 [MIT](http://opensource.org/licenses/mit-license.php)
