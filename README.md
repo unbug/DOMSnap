@@ -138,6 +138,10 @@ clear all captured snapshots
 
 Returns **object** DOMSnap
 
+Build
+=================
+1. install requirements run ```npm install```
+2. build and watch run ```gulp```
 
 Thanks
 =================
