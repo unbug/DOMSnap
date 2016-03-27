@@ -53,16 +53,19 @@ DS.resume('#main','my_id');
 
 APIs
 =========
-### DOMSnap
+### DOMSnap(config,readyCallback)
+
+Initialize DOMSnap
 
 **Parameters**
 
 -   `config`  [optional]
 -   `readyCallback` **function** will be called when DOMSnap is ready
 
+
 Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 
-### .capture
+### .capture(selector, id)
 
 capture snapshot html of the element matches the selector and store the result with a capture id
 
@@ -73,7 +76,7 @@ capture snapshot html of the element matches the selector and store the result w
 
 Returns **object** DOMSnap
 
-### .resume
+### .resume(selector, id, fallback)
 
 set the html of the element matches the selector [and capture id] by it's captured snapshot html
 
@@ -86,7 +89,7 @@ set the html of the element matches the selector [and capture id] by it's captur
 Returns **object** DOMSnap
 
 
-### .get
+### .get(selector, id)
 
 retrun the captured snapshot html of the element matches the selector and capture id
 
@@ -97,7 +100,7 @@ retrun the captured snapshot html of the element matches the selector and captur
 
 Returns **string** html
 
-### .getAll
+### .getAll(selector)
 
 retrun all the captured snapshots html of the element matches the selector
 
@@ -107,7 +110,7 @@ retrun all the captured snapshots html of the element matches the selector
 
 Returns **object** all snapshots as object - e.g. {DEFAULT_CAPTURE_ID: 'html of DEFAULT_CAPTURE', my_id: 'html of my_id'}
 
-### .remove
+### .remove(selector, id)
 
 remove the captured snapshot html of the element matches the selector [and capture id]
 
@@ -118,7 +121,7 @@ remove the captured snapshot html of the element matches the selector [and captu
 
 Returns **object** DOMSnap
 
-### .clear
+### .clear()
 
 clear all captured snapshots
 

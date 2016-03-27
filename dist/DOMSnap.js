@@ -56,7 +56,9 @@
 
 	/**
 	 *
-	 * Offline web pages by persisting DOM to IndexedDB/WebSQL
+	 * DOMSnap(config,readyCallback)
+	 * Initialize DOMSnap
+	 *
 	 * @constructor
 	 * @param config - [optional]
 	 * @param {function} readyCallback - will be called when DOMSnap is ready
@@ -100,9 +102,10 @@
 
 	/**
 	 *
+	 * .capture(selector, id)
 	 * capture snapshot html of the element matches the selector and store the result with a capture id
 	 *
-	 * @method
+	 * @function
 	 * @param {string} selector - selector of the element
 	 * @param {string} id - [optional]capture id
 	 * @returns {object} DOMSnap
@@ -117,6 +120,7 @@
 
 	/**
 	 *
+	 * .resume(selector, id, fallback)
 	 * set the html of the element matches the selector [and capture id] by it's captured snapshot html
 	 *
 	 * @function
@@ -141,8 +145,10 @@
 
 
 	/**
+	 * .get(selector, id)
 	 * retrun the captured snapshot html of the element matches the selector and capture id
 	 *
+	 * @function
 	 * @param {string} selector - selector of the element
 	 * @param {string} id - [optional]capture id, the result be the default snapshot if it's not specified
 	 * @returns {string} html
@@ -152,6 +158,8 @@
 	}
 
 	/**
+	 *
+	 * .getAll(selector)
 	 * retrun all the captured snapshots html of the element matches the selector
 	 *
 	 * @function
@@ -164,6 +172,7 @@
 
 	/**
 	 *
+	 * .remove(selector, id)
 	 * remove the captured snapshot html of the element matches the selector [and capture id]
 	 *
 	 * @function
@@ -179,6 +188,7 @@
 
 	/**
 	 *
+	 * .clear()
 	 * clear all captured snapshots
 	 *
 	 * @function

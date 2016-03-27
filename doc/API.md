@@ -1,5 +1,6 @@
 # capture
 
+.capture(selector, id)
 capture snapshot html of the element matches the selector and store the result with a capture id
 
 **Parameters**
@@ -11,13 +12,15 @@ Returns **object** DOMSnap
 
 # clear
 
+.clear()
 clear all captured snapshots
 
 Returns **object** DOMSnap
 
 # DOMSnap
 
-Offline web pages by persisting DOM to IndexedDB/WebSQL
+DOMSnap(config,readyCallback)
+Initialize DOMSnap
 
 **Parameters**
 
@@ -47,6 +50,7 @@ Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll,
 
 # get
 
+.get(selector, id)
 retrun the captured snapshot html of the element matches the selector and capture id
 
 **Parameters**
@@ -58,6 +62,7 @@ Returns **string** html
 
 # getAll
 
+.getAll(selector)
 retrun all the captured snapshots html of the element matches the selector
 
 **Parameters**
@@ -68,6 +73,7 @@ Returns **object** all snapshots as object - e.g. {DEFAULT_CAPTURE_ID: 'html of 
 
 # remove
 
+.remove(selector, id)
 remove the captured snapshot html of the element matches the selector [and capture id]
 
 **Parameters**
@@ -79,6 +85,7 @@ Returns **object** DOMSnap
 
 # resume
 
+.resume(selector, id, fallback)
 set the html of the element matches the selector [and capture id] by it's captured snapshot html
 
 **Parameters**
