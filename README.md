@@ -78,6 +78,8 @@ capture snapshot html of the element matches the selector and store the result w
 -   `id` **string** [optional]capture id, if html is not null set id to null to store html as the default snapshot
 -   `html` **string** [optional]snapshot html, set id to null to store html as the default snapshot
 
+Returns **DOMSnap** 
+
 ============
 ### .resume(selector, id, fallback)
 
