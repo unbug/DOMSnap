@@ -1,6 +1,6 @@
 {
   "name": "domsnap",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Offline web pages by persisting DOM to IndexedDB/WebSQL.",
   "license": "MIT",
   "main": "lib/index.js",
