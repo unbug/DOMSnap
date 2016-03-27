@@ -96,3 +96,14 @@ set the html of the element matches the selector [and capture id] by it's captur
 -   `fallback` **function** [optional]a callback function, will be called if no snapshot matched
 
 Returns **object** DOMSnap
+
+# watch
+
+.watch(selector)
+watch and auto capture the element matches the selector
+
+**Parameters**
+
+-   `selector` **string** selector - selector of the element
+
+Returns **object** DOMSnap

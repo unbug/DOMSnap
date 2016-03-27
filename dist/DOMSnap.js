@@ -46,12 +46,14 @@
 
 	var Util = __webpack_require__(1);
 	var SnapCache = __webpack_require__(3);
+	var Watcher = __webpack_require__(4);
 	var DB = __webpack_require__(2);
 
 	var DS,
 	  CONFIG = {},
 	  capId = 'DEFAULT_CAPTURE_ID',
-	  cache = new SnapCache(),
+	  oSnapCache = new SnapCache(),
+	  oWatcher = new Watcher(),
 	  snapDB;
 
 	/**
@@ -88,7 +90,7 @@
 	  snapDB = new DB(CONFIG.DBName,function(){
 	    snapDB.getAll(function(rows){
 	      rows.forEach(function (key) {
-	        cache.set(key.selector, key.capture_id, key.htm);
+	        oSnapCache.set(key.selector, key.capture_id, key.htm);
 	      });
 	      readyCallback && readyCallback(DS);
 	    });
@@ -114,7 +116,7 @@
 	function capture(selector, id, html) {
 	  var htm = Util.isNil(html)?Util.html(selector):html;
 	  id = _id(id);
-	  cache.set(selector, id, htm);
+	  oSnapCache.set(selector, id, htm);
 	  snapDB.add(selector, id, htm);
 	  return DS;
 	}
@@ -141,6 +143,19 @@
 	  return DS;
 	}
 
+	/**
+	 * .watch(selector)
+	 * watch and auto capture the element matches the selector
+	 * @param {string} selector - selector - selector of the element
+	 * @returns {object} DOMSnap
+	 */
+	function watch(selector) {
+	  oWatcher.watch(selector,function(){
+	    capture(selector);
+	  });
+
+	  return DS;
+	}
 
 	/**
 	 * .get(selector, id)
@@ -152,7 +167,7 @@
 	 * @returns {string} html
 	 */
 	function get(selector, id) {
-	  return cache.get(selector, id);
+	  return oSnapCache.get(selector, id);
 	}
 
 	/**
@@ -165,7 +180,7 @@
 	 * @returns {object} all snapshots as object - e.g. {DEFAULT_CAPTURE_ID: 'html of DEFAULT_CAPTURE', my_id: 'html of my_id'}
 	 */
 	function getAll(selector) {
-	  return cache.get(selector);
+	  return oSnapCache.get(selector);
 	}
 
 	/**
@@ -179,7 +194,7 @@
 	 * @returns {object} DOMSnap
 	 */
 	function remove(selector, id) {
-	  cache.del(selector, id);
+	  oSnapCache.del(selector, id);
 	  snapDB.delete(selector, id);
 	  return DS;
 	}
@@ -194,13 +209,14 @@
 	 */
 	function clear() {
 	  snapDB.deleteAll();
-	  cache.empty();
+	  oSnapCache.empty();
 	  return DS;
 	}
 
 	DS =  {
 	  capture: capture,
 	  resume: resume,
+	  watch: watch,
 	  get: get,
 	  getAll: getAll,
 	  remove: remove,
@@ -267,7 +283,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Util = __webpack_require__(1);
-	var lovefield = __webpack_require__(4);
+	var lovefield = __webpack_require__(5);
 	var lf = lf || lovefield;
 
 	module.exports = function (name,callback){
@@ -378,6 +394,49 @@
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Util = __webpack_require__(1);
+	var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+
+	function Watcher() {
+	  var observes = {};
+
+	  function add(id,observer){
+	    del(id);
+	    observes[id] = observer;
+	  }
+
+	  function del(id) {
+	    var observer = observes[id];
+	    if(observer){
+	      observer.disconnect();
+	      observes[id] = null;
+	      delete observes[id];
+	    }
+	  }
+
+	  this.watch = function (selector, mutationCallback) {
+	    var observer = new MutationObserver(mutationCallback);
+	    observer.observe(Util.el(selector), {
+	      attributes: true,
+	      childList: true,
+	      characterData: true,
+	      subtree: true
+	    });
+
+	    add(selector, observer);
+	  }
+
+	  this.unwatch = function (selector) {
+	    del(selector);
+	  }
+	}
+	module.exports = Watcher;
+
+
+/***/ },
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {if(!self.window){window=self;}
@@ -658,10 +717,10 @@
 	try{if(module){module.exports=lf;}}catch(e){}}.bind(window))()
 	//# sourceMappingURL=lovefield.min.js.map
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module)))
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {

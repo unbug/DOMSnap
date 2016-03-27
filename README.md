@@ -87,6 +87,16 @@ set the html of the element matches the selector [and capture id] by it's captur
 
 Returns **object** DOMSnap
 
+### .watch(selector)
+
+watch and auto capture the element matches the selector
+
+**Parameters**
+
+-   `selector` **string** selector - selector of the element
+
+Returns **object** DOMSnap
+
 
 ### .get(selector, id)
 
