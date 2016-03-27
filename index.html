@@ -40,6 +40,7 @@
   <button onclick="capture()" title="Capture for default">Capture</button>
   <button onclick="capture(2)" title="Capture with specified id 2">Capture 2</button>
   <button onclick="preCapture()" title="Capture with specified html">Pre-Capture</button>
+  <button onclick="watch()" title="Watching change and auto Capture">Watch</button>
   <button onclick="resume()" title="Resume default">Resume</button>
   <button onclick="resume(2)" title="Resume Capture 2">Resume 2</button>
   <button onclick="resume('pre_id')" title="Resume Pre-Capture">Resume Pre</button>
@@ -60,6 +61,10 @@
         '<h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>'+
         '<div contenteditable="true">This content was pre rendered</div>');
       console.log('captured');
+    }
+    function watch() {
+      DS.watch('#main');
+      console.log('watched');
     }
     function resume(id){
       DS.resume('#main',id);
