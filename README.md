@@ -67,7 +67,6 @@ Initialize DOMSnap
 
 Returns **DOMSnap** - {capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}
 
-============
 ### .capture(selector, id, html)
 
 capture snapshot html of the element matches the selector and store the result with a capture id
@@ -80,7 +79,6 @@ capture snapshot html of the element matches the selector and store the result w
 
 Returns **DOMSnap** 
 
-============
 ### .resume(selector, id, fallback)
 
 set the html of the element matches the selector [and capture id] by it's captured snapshot html
@@ -93,7 +91,6 @@ set the html of the element matches the selector [and capture id] by it's captur
 
 Returns **DOMSnap** 
 
-============
 ### .watch(selector)
 
 watch and auto capture the element matches the selector
@@ -104,7 +101,6 @@ watch and auto capture the element matches the selector
 
 Returns **DOMSnap** 
 
-============
 ### .get(selector, id)
 
 retrun the captured snapshot html of the element matches the selector and capture id
@@ -116,7 +112,6 @@ retrun the captured snapshot html of the element matches the selector and captur
 
 Returns **string** html
 
-============
 ### .getAll(selector)
 
 retrun all the captured snapshots html of the element matches the selector
@@ -127,7 +122,6 @@ retrun all the captured snapshots html of the element matches the selector
 
 Returns **object** all snapshots as object - e.g. {DEFAULT_CAPTURE_ID: 'html of DEFAULT_CAPTURE', my_id: 'html of my_id'}
 
-============
 ### .remove(selector, id)
 
 remove the captured snapshot html of the element matches the selector [and capture id]
@@ -139,7 +133,6 @@ remove the captured snapshot html of the element matches the selector [and captu
 
 Returns **DOMSnap** 
 
-============
 ### .clear()
 
 clear all captured snapshots
