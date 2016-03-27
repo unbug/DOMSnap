@@ -49,7 +49,7 @@ DS.resume('#main');
 DS.resume('#main','my_id');
 ```
 
-![domsnap](https://cloud.githubusercontent.com/assets/799578/14041602/91577d80-f2ad-11e5-806e-19ef26a25a38.gif)
+![domsnap](https://cloud.githubusercontent.com/assets/799578/14063839/1f923396-f417-11e5-9f87-5a8a94a04c32.gif)
 
 APIs
 =========
