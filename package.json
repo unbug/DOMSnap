@@ -13,6 +13,9 @@
   "keywords": [
     "DOMSnap",
     "offline",
+    "offline html",
+    "application cache",
+    "window.caches",
     "lovefiled",
     "IndexedDB",
     "WebSQL"
