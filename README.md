@@ -65,16 +65,15 @@ Initialize DOMSnap
 
 Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 
-### .capture(selector, id)
+### .capture(selector, id, html)
 
 capture snapshot html of the element matches the selector and store the result with a capture id
 
 **Parameters**
 
+-   `selector` **string** selector of the element
 -   `id` **string** [optional]capture id, if html is not null set id to null to store html as the default snapshot
 -   `html` **string** [optional]snapshot html, set id to null to store html as the default snapshot
-
-Returns **object** DOMSnap
 
 ### .resume(selector, id, fallback)
 

@@ -1,6 +1,6 @@
 # capture
 
-.capture(selector, id)
+.capture(selector, id, html)
 capture snapshot html of the element matches the selector and store the result with a capture id
 
 **Parameters**

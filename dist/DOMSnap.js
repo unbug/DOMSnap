@@ -102,7 +102,7 @@
 
 	/**
 	 *
-	 * .capture(selector, id)
+	 * .capture(selector, id, html)
 	 * capture snapshot html of the element matches the selector and store the result with a capture id
 	 *
 	 * @function
@@ -252,11 +252,6 @@
 	function html(selector, htm){
 	  var ele = el(selector);
 	  return isNil(htm)?ele.innerHTML:(ele.innerHTML = htm);
-	  if(isNil(htm)){
-	    return ele.innerHTML;
-	  }else{
-	    ele.innerHTML = htm;
-	  }
 	}
 
 	exports.os = os;
