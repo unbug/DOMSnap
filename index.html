@@ -7,21 +7,56 @@
   <meta name="description" content="Offline web pages by persisting DOM to IndexedDB/WebSQL" />
   <meta name="keywords" content="DOMSnap, offline html, application cache, window.caches, IndexedDB, WebSQL">
   <style>
-    body {
-      padding: 10px;
-      background-color: #fff;
+    html,body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
       box-sizing: border-box;
       font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      color: #333;
+      background-color: #eee;
+    }
+    a{
+      text-decoration: none;
+    }
+    .clearfix::before,
+    .clearfix::after {
+      content: "";
+      display: table;
+    }
+
+    .clearfix::after {
+      clear: both;
+    }
+    .container{
+      min-height: 100%;
+      padding: 10px 40px;
+      background: #fff;
+    }
+    .container>header{
+      vertical-align: middle;
+    }
+    .container>header>div{
+      display: inline-block;
+    }
+    .container>header .title{
+      width: 70%;
+    }
+    .container>header .links{
+      width: 28%;
+      text-align: right;
     }
     [contenteditable]{
-      width: 95%;
-      height: 200px;
-      margin: 10px;
+      max-width: 80%;
+      height: 120px;
+      margin: 10px 0;
+      padding: 10px;
       border: solid 1px gray;
       background-color: #efef8f;
     }
     @media screen and (min-width: 832px) {
-      body {
+      .container {
         width: 800px;
         margin: 0 auto;
       }
@@ -29,22 +64,29 @@
   </style>
 </head>
 <body ontuchstart="">
-  <main id="main">
-    <h1>DOMSnap</h1>
-    <h4>This sample demonstrates DOMSnap.</h4>
-    <h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>
-    <div contenteditable="true">
-      Please type something at here and click Capture to take a snapshot of this page.Then just reload it and click Resume to see what you just typed.
-    </div>
+  <main class="container">
+    <header class="clearfix">
+      <div class="title"><h1>DOMSnap</h1></div>
+      <div class="links">
+        <a href="https://github.com/unbug/DOMSnap">GitHub</a>
+      </div>
+    </header>
+    <hr>
+    <section id="main">
+      <h4>This sample demonstrates DOMSnap.</h4>
+      <h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>
+      <div contenteditable="true">
+        Please type something at here and click Capture to take a snapshot of this page.Then just reload it and click Resume to see what you just typed.
+      </div>
+    </section>
+    <button onclick="capture()" title="Capture for default">Capture</button>
+    <button onclick="capture(2)" title="Capture with specified id 2">Capture 2</button>
+    <button onclick="preCapture()" title="Capture with specified html">Pre-Capture</button>
+    <button onclick="watch()" title="Watching change and auto Capture">Watch</button>
+    <button onclick="resume()" title="Resume default">Resume</button>
+    <button onclick="resume(2)" title="Resume Capture 2">Resume 2</button>
+    <button onclick="resume('pre_id')" title="Resume Pre-Capture">Resume Pre</button>
   </main>
-  <button onclick="capture()" title="Capture for default">Capture</button>
-  <button onclick="capture(2)" title="Capture with specified id 2">Capture 2</button>
-  <button onclick="preCapture()" title="Capture with specified html">Pre-Capture</button>
-  <button onclick="watch()" title="Watching change and auto Capture">Watch</button>
-  <button onclick="resume()" title="Resume default">Resume</button>
-  <button onclick="resume(2)" title="Resume Capture 2">Resume 2</button>
-  <button onclick="resume('pre_id')" title="Resume Pre-Capture">Resume Pre</button>
-  <a href="https://github.com/unbug/DOMSnap">Github</a>
   <script src="dist/DOMSnap.min.js"></script>
   <script>
     var DS = DOMSnap(function () {
