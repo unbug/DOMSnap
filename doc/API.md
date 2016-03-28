@@ -99,11 +99,35 @@ Returns **DOMSnap**
 
 # watch
 
-.watch(selector)
+.watch(selector, options)
 watch and auto capture the element matches the selector
 
 **Parameters**
 
 -   `selector` **string** selector - selector of the element
+-   `options` **object** [optional]
+    {
+      id: {string|function} - capture id,
+      html: {string|function} - snapshot html
+    }
+
+**Examples**
+
+```javascript
+//e.g.1
+DS.watch('#main');
+
+//e.g.2
+DS.watch('#main',{
+  id: 'my_capture_id',//capture id
+  html: 'my_snapshot_html'//snapshot html
+});
+
+//e.g.3
+DS.watch('#main',{
+  id: function(selector){ return 'generated_capture_id_for_'+selector;}, //return capture id
+  html: function(selector){ return 'generated_snapshot_html_for_'+selector;} //return snapshot html
+});
+```
 
 Returns **DOMSnap** 

@@ -144,14 +144,39 @@
 	}
 
 	/**
-	 * .watch(selector)
+	 * .watch(selector, options)
 	 * watch and auto capture the element matches the selector
 	 * @param {string} selector - selector - selector of the element
+	 * @param {object} options - [optional]
+	 * {
+	 *  id: {string|function} - capture id,
+	 *  html: {string|function} - snapshot html
+	 * }
+	 * @example
+	 * //e.g.1
+	 * DS.watch('#main');
+	 *
+	 * //e.g.2
+	 * DS.watch('#main',{
+	 *   id: 'my_capture_id',//capture id
+	 *   html: 'my_snapshot_html'//snapshot html
+	 * });
+	 *
+	 * //e.g.3
+	 * DS.watch('#main',{
+	 *   id: function(selector){ return 'generated_capture_id_for_'+selector;}, //return capture id
+	 *   html: function(selector){ return 'generated_snapshot_html_for_'+selector;} //return snapshot html
+	 * });
 	 * @returns {DOMSnap}
 	 */
-	function watch(selector) {
+	function watch(selector, options) {
 	  oWatcher.watch(selector,function(){
-	    capture(selector);
+	    var id, html;
+	    if(options){
+	      id = Util.isFunction(options.id)? options.id(selector): options.id;
+	      html = Util.isFunction(options.html)? options.html(selector): options.html;
+	    }
+	    capture(selector, id, html);
 	  });
 
 	  return DS;
@@ -416,16 +441,18 @@
 	    }
 	  }
 
-	  this.watch = function (selector, mutationCallback) {
-	    var observer = new MutationObserver(mutationCallback);
-	    observer.observe(Util.el(selector), {
-	      attributes: true,
-	      childList: true,
-	      characterData: true,
-	      subtree: true
-	    });
+	  function genObserver(selector, mutationCallback){
+	    return new MutationObserver(mutationCallback)
+	      .observe(Util.el(selector), {
+	        attributes: true,
+	        childList: true,
+	        characterData: true,
+	        subtree: true
+	      });
+	  }
 
-	    add(selector, observer);
+	  this.watch = function (selector, mutationCallback) {
+	    add(selector, genObserver(selector, mutationCallback));
 	  }
 
 	  this.unwatch = function (selector) {
