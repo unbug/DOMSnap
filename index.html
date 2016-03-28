@@ -55,7 +55,7 @@
       console.log('captured');
     }
     function preCapture(){
-      DS.capture('#main','pre_id','' +
+      DS.capture('#main','pre_id',
         '<h1>DOMSnap</h1>'+
         '<h4>This sample demonstrates DOMSnap.</h4>'+
         '<h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>'+
@@ -64,6 +64,18 @@
     }
     function watch() {
       DS.watch('#main');
+      console.log('watched');
+    }
+    function watch2() {
+      var id = 0;
+      DS.watch('#main',{
+        id: function(selector){ return id++},
+        html: function(selector){
+          return '<h1>DOMSnap</h1>'+
+          '<h4>This sample demonstrates DOMSnap.</h4>'+
+          '<h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>'+
+          '<div contenteditable="true">This content was generated for id '+id+'</div>'}
+      });
       console.log('watched');
     }
     function resume(id){
