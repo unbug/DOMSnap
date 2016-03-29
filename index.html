@@ -14,7 +14,7 @@
       margin: 0;
       box-sizing: border-box;
       font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-      color: #333;
+      color: #555;
       background-color: #eee;
     }
     a{
@@ -25,9 +25,26 @@
       content: "";
       display: table;
     }
-
     .clearfix::after {
       clear: both;
+    }
+    button {
+      padding: 5px;
+      margin: 2px;
+      border: 0;
+      color: #fff;
+      background: #3498db;
+      text-decoration: none;
+    }
+    button:hover {
+      background: #3cb0fd;
+      text-decoration: none;
+    }
+    button.green{
+      background-color: #4CAF50;
+    }
+    button.green:hover{
+      background-color: #74A976;
     }
     .container{
       min-height: 100%;
@@ -82,9 +99,10 @@
     <button onclick="capture(2)" title="Capture with specified id 2">Capture 2</button>
     <button onclick="preCapture()" title="Capture with specified html">Pre-Capture</button>
     <button onclick="watch()" title="Watching change and auto Capture">Watch</button>
-    <button onclick="resume()" title="Resume default">Resume</button>
-    <button onclick="resume(2)" title="Resume Capture 2">Resume 2</button>
-    <button onclick="resume('pre_id')" title="Resume Pre-Capture">Resume Pre</button>
+    <button onclick="customWatch()" title="Custom watching change and auto Capture">Custom Watch</button>
+    <button class="green" onclick="resume()" title="Resume default">Resume</button>
+    <button class="green" onclick="resume(2)" title="Resume Capture 2">Resume 2</button>
+    <button class="green" onclick="resume('pre_id')" title="Resume Pre-Capture">Resume Pre</button>
     <section id="demo2">
       <h4>Demo 2</h4>
       <div contenteditable="true">
@@ -92,7 +110,7 @@
       </div>
     </section>
     <button onclick="watchAll()" title="Watching change and auto Capture">Watch all demos</button>
-    <button onclick="resumeAll()" title="Resume default">Resume all demos</button>
+    <button class="green" onclick="resumeAll()" title="Resume default">Resume all demos</button>
   </main>
   <script src="dist/DOMSnap.min.js"></script>
   <script>
@@ -109,7 +127,7 @@
         '<div contenteditable="true">This content was pre rendered</div>');
       console.log('captured');
     }
-    function watchMain() {
+    function watch() {
       DS.watch('#demo1');
       console.log('watched');
     }
