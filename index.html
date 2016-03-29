@@ -48,7 +48,6 @@
       text-align: right;
     }
     [contenteditable]{
-      max-width: 80%;
       height: 120px;
       margin: 10px 0;
       padding: 10px;
@@ -72,9 +71,9 @@
       </div>
     </header>
     <hr>
-    <section id="main">
-      <h4>This sample demonstrates DOMSnap.</h4>
-      <h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>
+    <h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.These samples demonstrate DOMSnap.</h4>
+    <section id="demo1">
+      <h4>Demo 1</h4>
       <div contenteditable="true">
         Please type something at here and click Capture to take a snapshot of this page.Then just reload it and click Resume to see what you just typed.
       </div>
@@ -86,6 +85,14 @@
     <button onclick="resume()" title="Resume default">Resume</button>
     <button onclick="resume(2)" title="Resume Capture 2">Resume 2</button>
     <button onclick="resume('pre_id')" title="Resume Pre-Capture">Resume Pre</button>
+    <section id="demo2">
+      <h4>Demo 2</h4>
+      <div contenteditable="true">
+        Please type something....
+      </div>
+    </section>
+    <button onclick="watchAll()" title="Watching change and auto Capture">Watch all demos</button>
+    <button onclick="resumeAll()" title="Resume default">Resume all demos</button>
   </main>
   <script src="dist/DOMSnap.min.js"></script>
   <script>
@@ -93,36 +100,42 @@
       console.log('DOMSnap is ready');
     });
     function capture(id){
-      DS.capture('#main',id);
+      DS.capture('#demo1',id);
       console.log('captured');
     }
     function preCapture(){
-      DS.capture('#main','pre_id',
-        '<h1>DOMSnap</h1>'+
-        '<h4>This sample demonstrates DOMSnap.</h4>'+
-        '<h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>'+
+      DS.capture('#demo1','pre_id',
+        '<h4>Demo 1</h4>'+
         '<div contenteditable="true">This content was pre rendered</div>');
       console.log('captured');
     }
-    function watch() {
-      DS.watch('#main');
+    function watchMain() {
+      DS.watch('#demo1');
       console.log('watched');
     }
-    function watch2() {
+    function customWatch() {
       var id = 0;
-      DS.watch('#main',{
+      DS.watch('#demo1',{
         id: function(selector){ return id++},
         html: function(selector){
-          return '<h1>DOMSnap</h1>'+
-          '<h4>This sample demonstrates DOMSnap.</h4>'+
-          '<h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</h4>'+
+          return '<h4>Demo 1</h4>'+
           '<div contenteditable="true">This content was generated for id '+id+'</div>'}
       });
       console.log('watched');
     }
     function resume(id){
-      DS.resume('#main',id);
+      DS.resume('#demo1',id);
       console.log('resumed');
+    }
+
+    function watchAll() {
+      DS.watch(['#demo1','#demo2']);
+      console.log('watched');
+    }
+    function resumeAll(id){
+      DS.resume('#demo1');
+      DS.resume('#demo2');
+      console.log('all resumed');
     }
   </script>
 </body>
