@@ -146,11 +146,11 @@
 	/**
 	 * .watch(selector, options)
 	 * watch and auto capture the element matches the selector
-	 * @param {string} selector - selector - selector of the element
+	 * @param {string|array} selector - selector[s] of the element[s]
 	 * @param {object} options - [optional]
 	 * {
-	 *  id: {string|function} - capture id,
-	 *  html: {string|function} - snapshot html
+	 *   id: {string|function} - capture id,
+	 *   html: {string|function} - snapshot html
 	 * }
 	 * @example
 	 * //e.g.1
@@ -167,16 +167,22 @@
 	 *   id: function(selector){ return 'generated_capture_id_for_'+selector;}, //return capture id
 	 *   html: function(selector){ return 'generated_snapshot_html_for_'+selector;} //return snapshot html
 	 * });
+	 *
+	 * //e.g.4
+	 * DS.watch(['#main', '#another']);//watch multi elements
 	 * @returns {DOMSnap}
 	 */
 	function watch(selector, options) {
-	  oWatcher.watch(selector,function(){
-	    var id, html;
-	    if(options){
-	      id = Util.isFunction(options.id)? options.id(selector): options.id;
-	      html = Util.isFunction(options.html)? options.html(selector): options.html;
-	    }
-	    capture(selector, id, html);
+	  var selectors = Util.isArray(selector)?selector:[selector];
+	  selectors.forEach(function(key){
+	    oWatcher.watch(key,function(){
+	      var id, html;
+	      if(options){
+	        id = Util.isFunction(options.id)? options.id(key): options.id;
+	        html = Util.isFunction(options.html)? options.html(key): options.html;
+	      }
+	      capture(key, id, html);
+	    });
 	  });
 
 	  return DS;
@@ -276,6 +282,10 @@
 	  return typeof val=='function';
 	}
 
+	function isArray(val) {
+	  return toString.call(val) === '[object Array]';
+	}
+
 	function apply(obj, config, promise) {
 	  var conf = isFunction(config)?config.call(obj):config;
 	  if (conf) {
@@ -298,6 +308,7 @@
 	exports.os = os;
 	exports.isNil = isNil;
 	exports.isFunction = isFunction;
+	exports.isArray = isArray;
 	exports.apply = apply;
 	exports.el = el;
 	exports.html = html;
