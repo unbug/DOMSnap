@@ -17,8 +17,15 @@
       color: #555;
       background-color: #eee;
     }
-    a{
+    a,a:visited{
+      color: #3498db;
       text-decoration: none;
+    }
+    p{
+      margin: 0.3em 0;
+    }
+    h1,h2,h3,h4,h5{
+      margin: 0.5em 0;
     }
     .clearfix::before,
     .clearfix::after {
@@ -35,6 +42,7 @@
       color: #fff;
       background: #3498db;
       text-decoration: none;
+      cursor: pointer;
     }
     button:hover {
       background: #3cb0fd;
@@ -48,7 +56,7 @@
     }
     .container{
       min-height: 100%;
-      padding: 10px 40px;
+      padding: 20px 40px;
       background: #fff;
     }
     .container>header{
@@ -65,11 +73,11 @@
       text-align: right;
     }
     [contenteditable]{
-      height: 120px;
+      height: 60px;
       margin: 10px 0;
       padding: 10px;
-      border: solid 1px gray;
-      background-color: #efef8f;
+      border: solid 1px #FFC107;
+      background-color: #FBFBE8;
     }
     @media screen and (min-width: 832px) {
       .container {
@@ -88,7 +96,15 @@
       </div>
     </header>
     <hr>
-    <h4>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.These samples demonstrate DOMSnap.</h4>
+    <h3>
+      <p>DOMSnap helps you to offline web pages by persisting DOM to IndexedDB/WebSQL.</p>
+    </h3>
+    <p>HTML5 provides LocalStorage, IndexedDB, and <a href="https://googlechrome.github.io/samples/service-worker/window-caches/">window.caches</a> to build offline web apps.
+      But all of <a href="http://www.html5rocks.com/en/features/offline">these technologies</a>, we can't miss local database.
+      DOMSnap takes full advantage of <a href="http://www.html5rocks.com/en/features/offline">offline technologies</a>.
+      Storing HTML to local IndexedDB/WebSQL and resumeing when you're offline.
+      With DOMSnap, web pages can resume to their last state with less request to the server and less template render.
+      Think offline is a long way out, why not just give DOMSnap a try?</p>
     <section id="demo1">
       <h4>Demo 1</h4>
       <div contenteditable="true">
@@ -99,7 +115,6 @@
     <button onclick="capture(2)" title="Capture with specified id 2">Capture 2</button>
     <button onclick="preCapture()" title="Capture with specified html">Pre-Capture</button>
     <button onclick="watch()" title="Watching change and auto Capture">Watch</button>
-    <button onclick="customWatch()" title="Custom watching change and auto Capture">Custom Watch</button>
     <button class="green" onclick="resume()" title="Resume default">Resume</button>
     <button class="green" onclick="resume(2)" title="Resume Capture 2">Resume 2</button>
     <button class="green" onclick="resume('pre_id')" title="Resume Pre-Capture">Resume Pre</button>
