@@ -97,12 +97,12 @@ watch and auto capture the element matches the selector
 
 **Parameters**
 
--   `selector` **string** selector - selector of the element
+-   `selector` **string or array** selector[s] of the element[s]
 -   `options` **object** [optional]
-    {
-      id: {string|function} - capture id,
-      html: {string|function} - snapshot html
-    }
+   {
+     id: {string|function} - capture id,
+     html: {string|function} - snapshot html
+   }
 
 **Examples**
 
@@ -112,15 +112,18 @@ DS.watch('#main');
 
 //e.g.2
 DS.watch('#main',{
-  id: 'my_capture_id',//capture id
-  html: 'my_snapshot_html'//snapshot html
+ id: 'my_capture_id',//capture id
+ html: 'my_snapshot_html'//snapshot html
 });
 
 //e.g.3
 DS.watch('#main',{
-  id: function(selector){ return 'generated_capture_id_for_'+selector;}, //return capture id
-  html: function(selector){ return 'generated_snapshot_html_for_'+selector;} //return snapshot html
+ id: function(selector){ return 'generated_capture_id_for_'+selector;}, //return capture id
+ html: function(selector){ return 'generated_snapshot_html_for_'+selector;} //return snapshot html
 });
+
+//e.g.4
+DS.watch(['#main', '#another']);//watch multi elements
 ```
 
 Returns **DOMSnap** 
