@@ -166,6 +166,15 @@ clear all captured snapshots
 
 Returns **DOMSnap** 
 
+Roadmap & Make contributions
+==============
+ - **on-going** Auto watch and auto resume.
+ - **on-going** Auto clear expired capture.
+ - **on-going** Multi scopes in one domain.
+ - Resume with DOM diff.
+ - **on-going** Events(ready, before resume, after resume, before capture, after capture)
+ - Replace lovefiled with a lightweight IndexedDB/WebSQL.
+
 Build
 =================
 1. install requirements run ```npm install```
