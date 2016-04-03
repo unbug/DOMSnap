@@ -129,17 +129,21 @@
   </main>
   <script src="dist/DOMSnap.min.js"></script>
   <script>
-    var DS = DOMSnap(function () {
-      console.log('DOMSnap is ready');
+    var DS = DOMSnap({
+      onReady: function () {
+        console.log('DOMSnap is ready');
+      }
     });
     function capture(id){
-      DS.capture('#demo1',id);
+      DS.capture('#demo1',{id: id});
       console.log('captured');
     }
     function preCapture(){
-      DS.capture('#demo1','pre_id',
-        '<h4>Demo 1</h4>'+
-        '<div contenteditable="true">This content was pre rendered</div>');
+      DS.capture('#demo1',{
+        id: 'pre_id',
+        html: '<h4>Demo 1</h4>'+
+          '<div contenteditable="true">This content was pre rendered!</div>'
+      });
       console.log('captured');
     }
     function watch() {
@@ -157,7 +161,7 @@
       console.log('watched');
     }
     function resume(id){
-      DS.resume('#demo1',id);
+      DS.resume('#demo1',{id: id});
       console.log('resumed');
     }
 
@@ -165,7 +169,7 @@
       DS.watch(['#demo1','#demo2']);
       console.log('watched');
     }
-    function resumeAll(id){
+    function resumeAll(){
       DS.resume('#demo1');
       DS.resume('#demo2');
       console.log('all resumed');
