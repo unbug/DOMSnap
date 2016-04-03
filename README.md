@@ -32,62 +32,66 @@ and require it in your files
 var DOMSnap = require('domsnap');
 ```
 
-***Examples***
+**Examples**
 
 ```javascript
 //init DOMSnap
-var DS = DOMSnap(function(){
-  console.log('DOMSnap is ready');
+var DS = DOMSnap({
+  onReady: function(){
+    console.log('DOMSnap is ready');
+  }
 });
 
 //capture snapshot html of #main
 DS.capture('#main');
 //capture with specified capture id
-DS.capture('#main','my_id');
+DS.capture('#main', {id: 'my_id'});
 
 //set the html of #main by it's captured snapshot html
 DS.resume('#main');
 //set by specified capture id
-DS.resume('#main','my_id');
+DS.resume('#main',{id: 'my_id'});
 ```
+
 
 ![domsnap](https://cloud.githubusercontent.com/assets/799578/14100241/a6c6174e-f5be-11e5-94a5-409fcba78bc3.gif)
 
 APIs
 =========
-### DOMSnap(config,readyCallback)
+### DOMSnap(config)
 
 Initialize DOMSnap
 
 **Parameters**
 
--   `config`  [optional]
--   `readyCallback` **function** will be called when DOMSnap is ready
+-   `config` **object** [optional]
+    -   `config.onReady` **function** will be called when DOMSnap is ready
 
+Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 
-Returns **DOMSnap** - {capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}
-
-### .capture(selector, id, html)
+### .capture(selector, options)
 
 capture snapshot html of the element matches the selector and store the result with a capture id
 
 **Parameters**
 
 -   `selector` **string** selector of the element
--   `id` **string** [optional]capture id, if html is not null set id to null to store html as the default snapshot
--   `html` **string** [optional]snapshot html, set id to null to store html as the default snapshot
+-   `options` **object** [optional]
+    -   `options.id` **string or function** capture id, if html is not null set id to null to store html as the default snapshot
+    -   `options.html` **string or function** snapshot html, set id to null to store html as the default snapshot
 
 Returns **DOMSnap** 
 
-### .resume(selector, id, fallback)
+### .resume(selector, options)
 
 set the html of the element matches the selector [and capture id] by it's captured snapshot html
 
 **Parameters**
 
 -   `selector` **string** selector of the element
--   `id` **string** [optional]capture id, the result will be the default snapshot if it's not specified
--   `fallback` **function** [optional]a callback function, will be called if no snapshot matched
+-   `options` **object** [optional]
+    -   `options.id` **string or function** capture id, if html is not null set id to null to store html as the default snapshot
+    -   `options.fallback` **function** a callback function, will be called if no snapshot matched
 
 Returns **DOMSnap** 
 
@@ -99,10 +103,8 @@ watch and auto capture the element matches the selector
 
 -   `selector` **string or array** selector[s] of the element[s]
 -   `options` **object** [optional]
-   {
-     id: {string|function} - capture id,
-     html: {string|function} - snapshot html
-   }
+    -   `options.id` **string or function** capture id
+    -   `options.html` **string or function** snapshot html
 
 **Examples**
 
@@ -112,14 +114,14 @@ DS.watch('#main');
 
 //e.g.2
 DS.watch('#main',{
- id: 'my_capture_id',//capture id
- html: 'my_snapshot_html'//snapshot html
+  id: 'my_capture_id',//capture id
+  html: 'my_snapshot_html'//snapshot html
 });
 
 //e.g.3
 DS.watch('#main',{
- id: function(selector){ return 'generated_capture_id_for_'+selector;}, //return capture id
- html: function(selector){ return 'generated_snapshot_html_for_'+selector;} //return snapshot html
+  id: function(selector){ return 'generated_capture_id_for_'+selector;}, //return capture id
+  html: function(selector){ return 'generated_snapshot_html_for_'+selector;} //return snapshot html
 });
 
 //e.g.4
@@ -176,7 +178,7 @@ Roadmap & Make contributions
  - Replace lovefiled with a lightweight IndexedDB/WebSQL.
 
 Build
-=================
+==============
 1. install requirements run ```npm install```
 2. build and watch run ```gulp```
 
