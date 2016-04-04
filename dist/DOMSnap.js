@@ -94,7 +94,7 @@
 	 * @param {object} config - [optional]
 	 * @param {function} config.onReady  - will be called when DOMSnap is ready
 	 * @param {number} config.version  - Version control, Nonzero. Update is required if web app has been updated. Default is 1
-	 * @param {string} config.scope  - "host|path|or any string value". "host": location.host; "path": location.host+location.pathname; defautl is "path"
+	 * @param {string} config.scope  - "host|path|or any string value". "host": location.host; "path": location.host+location.pathname; default is "path"
 	 * @returns {object} {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 	 * @example
 	 * //init DOMSnap
