@@ -54,9 +54,13 @@
 	  capId = 'DEFAULT_CAPTURE_ID',
 	  oSnapCache = new SnapCache(),
 	  oWatcher = new Watcher(),
-	  snapDB;
+	  snapDB,
+	  inited;
 
-	CONFIG = {};
+	CONFIG = {
+	  scope: 'path',
+	  version: 1
+	};
 
 
 	function _id(id){
@@ -67,6 +71,19 @@
 	  return Util.isFunction(val)? val.apply(this,[].slice.call(arguments, 1)): val;
 	}
 
+	function _scope(val){
+	  var location = window.location,
+	    host = location.host,
+	    path = host+location.pathname;
+	  if(/^host$/ig.test(val)){
+	    return host;
+	  }
+	  else if(/^path$/ig.test(val) || Util.isNil(val)){
+	    return path;
+	  }else{
+	    return val;
+	  }
+	}
 
 	/**
 	 *
@@ -76,6 +93,8 @@
 	 * @constructor
 	 * @param {object} config - [optional]
 	 * @param {function} config.onReady  - will be called when DOMSnap is ready
+	 * @param {number} config.version  - Version control, Nonzero. Update is required if web app has been updated. Default is 1
+	 * @param {string} config.scope  - "host|path|or any string value". "host": location.host; "path": location.host+location.pathname; defautl is "path"
 	 * @returns {object} {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 	 * @example
 	 * //init DOMSnap
@@ -96,9 +115,12 @@
 	 * DS.resume('#main',{id: 'my_id'});
 	 */
 	function DOMSnap(config) {
+	  if(inited){return DS;}
+	  inited = true;
+
 	  Util.apply(CONFIG,config);
 	  snapDB = new DB(CONFIG.DBName,function(){
-	    snapDB.getAll(function(rows){
+	    snapDB.getAll(_scope(CONFIG.scope), CONFIG.version, function(rows){
 	      rows.forEach(function (key) {
 	        oSnapCache.set(key.selector, key.capture_id, key.htm);
 	      });
@@ -126,7 +148,7 @@
 	  id = Util.isNil(options.id)?_id(options.id):_str(options.id, selector);
 	  html = Util.isNil(options.html)?Util.html(selector):_str(options.html, selector);
 	  oSnapCache.set(selector, id, html);
-	  snapDB.add(selector, id, html);
+	  snapDB.add(selector, id, html, _scope(CONFIG.scope), CONFIG.version);
 	  return DS;
 	}
 
@@ -232,21 +254,24 @@
 	 */
 	function remove(selector, id) {
 	  oSnapCache.del(selector, id);
-	  snapDB.delete(selector, id);
+	  snapDB.delete(selector, id, _scope(CONFIG.scope), CONFIG.version);
 	  return DS;
 	}
 
 	/**
 	 *
-	 * .clear()
+	 * .clear(version)
 	 * clear all captured snapshots
 	 *
 	 * @function
+	 * @param {number} version - [optional]Same value as initialize DOMSnap if it's not specified.
 	 * @returns {DOMSnap}
 	 */
-	function clear() {
-	  snapDB.deleteAll();
-	  oSnapCache.empty();
+	function clear(version) {
+	  if(Util.isNil(version) || version == CONFIG.version){
+	    oSnapCache.empty();
+	  }
+	  snapDB.deleteAll(_scope(CONFIG.scope), version || CONFIG.version);
 	  return DS;
 	}
 
@@ -329,7 +354,7 @@
 	var lf = lf || lovefield;
 
 	module.exports = function (name,callback){
-	  var schemaBuilder = lf.schema.create(name||'DOMSnap_DB', 3),
+	  var schemaBuilder = lf.schema.create(name||'DOMSnap_DB', 5),
 	    DB,Table;
 
 	  schemaBuilder
@@ -338,6 +363,8 @@
 	    .addColumn('selector', lf.Type.STRING)
 	    .addColumn('capture_id', lf.Type.STRING)
 	    .addColumn('htm', lf.Type.OBJECT)
+	    .addColumn('scope', lf.Type.STRING)
+	    .addColumn('version', lf.Type.INTEGER)
 	    .addColumn('create', lf.Type.DATE_TIME)
 	    .addPrimaryKey(['id'], true);
 
@@ -349,12 +376,14 @@
 	    callback && callback();
 	  });
 
-	  this.add = function (selector, capture_id, htm) {
-	    !Util.isNil(selector) && !Util.isNil(capture_id) && this.delete(selector, capture_id,function(){
+	  this.add = function (selector, capture_id, htm, scope, version) {
+	    !Util.isNil(selector) && !Util.isNil(capture_id) && this.delete(selector, capture_id, scope, version, function(){
 	      var row = Table.createRow({
 	        'selector': selector,
 	        'capture_id': capture_id,
 	        'htm': htm,
+	        'scope': scope,
+	        'version': version,
 	        'create': new Date()
 	      });
 	      DB.insertOrReplace().into(Table).values([row])
@@ -362,30 +391,40 @@
 	    });
 	  }
 
-	  this.delete = function (selector, capture_id, callback) {
+	  this.delete = function (selector, capture_id, scope, version, callback) {
 	    DB.delete()
 	      .from(Table)
 	      .where(lf.op.and(
 	        Table.selector.eq(selector),
-	        Table.capture_id.eq(capture_id)
+	        Table.capture_id.eq(capture_id),
+	        Table.scope.eq(scope),
+	        Table.version.eq(version)
 	      ))
 	      .exec().then(function () {
-	      callback && callback();
-	    });
+	        callback && callback();
+	      });
 	  }
 
-	  this.getAll = function (callback) {
+	  this.getAll = function (scope, version, callback) {
 	    DB.select()
 	      .from(Table)
+	      .where(lf.op.and(
+	        Table.scope.eq(scope),
+	        Table.version.eq(version)
+	      ))
 	      .orderBy(Table.id, lf.Order.DESC)
 	      .exec().then(function (rows) {
-	      callback && callback(rows);
-	    });
+	        callback && callback(rows);
+	      });
 	  }
 
-	  this.deleteAll = function () {
+	  this.deleteAll = function (scope, version) {
 	    DB.delete()
 	      .from(Table)
+	      .where(lf.op.and(
+	        Table.scope.eq(scope),
+	        Table.version.eq(version)
+	      ))
 	      .exec();
 	  }
 	}
