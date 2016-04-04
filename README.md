@@ -66,6 +66,8 @@ Initialize DOMSnap
 
 -   `config` **object** [optional]
     -   `config.onReady` **function** will be called when DOMSnap is ready
+    -   `config.version` **number** Version control, Nonzero. If you update your web app, you must update version. Default is 1
+    -   `config.scope` **string** "host|path|or any string value". "host": location.host; "path": location.host+location.pathname; defautl is "path"
 
 Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 
@@ -166,13 +168,16 @@ Returns **DOMSnap**
 
 clear all captured snapshots
 
+**Parameters**
+
+-   `version` **number** [optional]Same value as initialize DOMSnap if it's not specified.
+
 Returns **DOMSnap** 
 
 Roadmap & Make contributions
 ==============
  - **on-going** Auto watch and auto resume.
  - **on-going** Auto clear expired capture.
- - **on-going** Multi scopes in one domain.
  - Resume with DOM diff.
  - **on-going** Events(ready, before resume, after resume, before capture, after capture)
  - Replace lovefiled with a lightweight IndexedDB/WebSQL.
