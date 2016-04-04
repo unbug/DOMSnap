@@ -66,7 +66,7 @@ Initialize DOMSnap
 
 -   `config` **object** [optional]
     -   `config.onReady` **function** will be called when DOMSnap is ready
-    -   `config.version` **number** Version control, Nonzero. If you update your web app, you must update version. Default is 1
+    -   `config.version` **number** Version control, Nonzero. Update is required if web app has been updated. Default is 1
     -   `config.scope` **string** "host|path|or any string value". "host": location.host; "path": location.host+location.pathname; defautl is "path"
 
 Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
@@ -164,7 +164,7 @@ remove the captured snapshot html of the element matches the selector [and captu
 
 Returns **DOMSnap** 
 
-### .clear()
+### .clear(version)
 
 clear all captured snapshots
 
