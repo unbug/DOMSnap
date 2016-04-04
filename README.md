@@ -180,7 +180,7 @@ Roadmap & Make contributions
  - **on-going** Auto clear expired capture.
  - Resume with DOM diff.
  - **on-going** Events(ready, before resume, after resume, before capture, after capture)
- - Replace lovefiled with a lightweight IndexedDB/WebSQL.
+ - Replace lovefiled with a lightweight IndexedDB/WebSQL wrapper.
 
 Build
 ==============
