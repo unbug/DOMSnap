@@ -181,7 +181,6 @@ Roadmap & Make contributions
  - **on-going** Auto clear expired capture.
  - Resume with DOM diff.
  - **on-going** Events(ready, before resume, after resume, before capture, after capture)
- - Replace lovefiled with a lightweight IndexedDB/WebSQL wrapper.
 
 Build
 ==============
@@ -193,9 +192,6 @@ Find me
   * Twitter [@unbug](https://twitter.com/unbug)
   * 微博 [@听奏](http://weibo.com/unbug)
   
-Dependencies
-=================
-  * [Google Lovefield](https://github.com/google/lovefield)
   
 LICENSE
 =========
