@@ -23,6 +23,14 @@ gulp.task('min', function () {
     .pipe($.size({title: 'min'}));
 });
 
+//gzip js
+gulp.task('gzip', function () {
+  return gulp.src('./dist/DOMSnap.min.js')
+    .pipe($.gzip({ append: true }))
+    .pipe(gulp.dest('./dist'))
+    .pipe($.size({title: 'gzip'}));
+});
+
 //build doc
 gulp.task('doc', function () {
   gulp.src('./lib/DOMSnap.js')
@@ -41,7 +49,7 @@ gulp.task('watch', function () {
 
 //buid and dist lib
 gulp.task('dist', function (cb) {
-  runSequence('build', 'min', 'doc', cb);
+  runSequence('build', 'min', 'gzip', 'doc', cb);
 });
 
 gulp.task('default', function (cb) {

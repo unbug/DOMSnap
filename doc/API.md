@@ -33,7 +33,8 @@ Initialize DOMSnap
 -   `config` **object** [optional]
     -   `config.onReady` **function** will be called when DOMSnap is ready
     -   `config.version` **number** Version control, Nonzero. Update is required if web app has been updated. Default is 1
-    -   `config.scope` **string** "host|path|or any string value". "host": location.host; "path": location.host+location.pathname; default is "path"
+    -   `config.scope` **string** "host|path|or any string value".  "host": location.host; "path": location.host+location.pathname; default is "path"
+    -   `config.storeType` **string** Data store to use. "IndexedDB" or "WebSQL", if not defined, use "WebSQL" for iOS and "IndexedDB" for others.
 
 **Examples**
 

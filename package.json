@@ -1,6 +1,6 @@
 {
   "name": "domsnap",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Offline web pages by persisting DOM to IndexedDB/WebSQL.",
   "license": "MIT",
   "main": "lib/index.js",
@@ -19,12 +19,11 @@
     "IndexedDB",
     "WebSQL"
   ],
-  "dependencies": {
-    "lovefield": "^2.1.7"
-  },
+  "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-documentation": "^2.2.0",
+    "gulp-gzip": "^1.2.0",
     "gulp-load-plugins": "^1.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-size": "^2.1.0",
