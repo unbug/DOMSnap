@@ -69,7 +69,7 @@ Initialize DOMSnap
     -   `config.version` **number** Version control, Nonzero. Update is required if web app has been updated. Default is 1
     -   `config.scope` **string** "host|path|or any string value".  "host": location.host; "path": location.host+location.pathname; default is "path"
     -   `config.storeType` **string** Data store to use. "IndexedDB" or "WebSQL", if not defined, use "WebSQL" for iOS and "IndexedDB" for others.
-    -   `config.expires` **number** Milliseconds of how long every snapshot will expires, default is 1 week(1000*60*60*24*7).Note, new snapshots will never expires until the page reload.
+    -   `config.expires` **number** Milliseconds of how long every snapshot will expires, default is 1 week. Note, new snapshots will never expires until the page reload.
 
 Returns **object** {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 
