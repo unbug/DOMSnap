@@ -61,7 +61,8 @@
 	CONFIG = {
 	  storeType: null,
 	  scope: 'path',
-	  version: 1
+	  version: 1,
+	  expires: 1000*60*60*24*7
 	};
 
 
@@ -98,6 +99,7 @@
 	 * @param {number} config.version  - Version control, Nonzero. Update is required if web app has been updated. Default is 1
 	 * @param {string} config.scope  - "host|path|or any string value".  "host": location.host; "path": location.host+location.pathname; default is "path"
 	 * @param {string} config.storeType  - Data store to use. "IndexedDB" or "WebSQL", if not defined, use "WebSQL" for iOS and "IndexedDB" for others.
+	 * @param {number} config.expires  - Milliseconds of how long every snapshot will expires, default is 1 week(1000*60*60*24*7).Note, new snapshots will never expires until the page reload.
 	 * @returns {object} {{capture: capture, resume: resume, get: get, getAll: getAll, remove: remove, clear: clear}|*}
 	 * @example
 	 * //init DOMSnap
@@ -147,6 +149,7 @@
 	 * @param {object} options - [optional]
 	 * @param {string|function} options.id - capture id, if html is not null set id to null to store html as the default snapshot
 	 * @param {string|function} options.html - snapshot html, set id to null to store html as the default snapshot
+	 * @param {number} options.expires  - Milliseconds of how long the snapshot will expires. Same value as initialize DOMSnap if it's not specified.
 	 * @returns {DOMSnap}
 	 */
 	function capture(selector, options) {
@@ -155,7 +158,7 @@
 	  id = Util.isNil(options.id)?_id(options.id):_str(options.id, selector);
 	  html = Util.isNil(options.html)?Util.html(selector):_str(options.html, selector);
 	  oMemory.set(selector, id, html);
-	  oDB.add(selector, id, html, _scope(CONFIG.scope), CONFIG.version);
+	  oDB.add(selector, id, html, _scope(CONFIG.scope), CONFIG.version, Util.isNil(options.expires)?CONFIG.expires:options.expires);
 	  return DS;
 	}
 
@@ -366,15 +369,13 @@
 	module.exports = function (readyCallback) {
 	  var self = this,
 	    DB_NAME = 'DOMSnap_DB',
-	    DB_VERSION = 14,
+	    DB_VERSION = 16,
 	    TB_NAME = 'Snap',
 	    request = indexedDB.open(DB_NAME, DB_VERSION),
 	    db;
 
 	  function onError(event) {
-	    if (typeof console !== "undefined") {
-	      console.error("An error occurred", event);
-	    }
+	    console.error("An error occurred", event);
 	  }
 
 	  function install() {
@@ -410,7 +411,7 @@
 	  };
 	  request.onerror = onError;
 
-	  this.add = function (selector, capture_id, htm, scope, version) {
+	  this.add = function (selector, capture_id, htm, scope, version, expires) {
 	    !Util.isNil(selector) && !Util.isNil(capture_id) && this.delete(selector, capture_id, scope, version, function() {
 	      var row = {
 	        'selector': selector,
@@ -418,6 +419,7 @@
 	        'htm': htm,
 	        'scope': scope,
 	        'version': version,
+	        'expires': expires || 0,
 	        'create_date': new Date().getTime()
 	      }
 	      db.transaction([TB_NAME], IDBTransaction.READ_WRITE || 'readwrite')
@@ -450,8 +452,9 @@
 	  }
 
 	  this.getAll = function (scope, version, callback) {
-	    var results = [];
-	    db.transaction([TB_NAME], IDBTransaction.READ_ONLY || 'readonly')
+	    var results = [],
+	      now = new Date().getTime();
+	    db.transaction([TB_NAME], IDBTransaction.READ_WRITE || 'readwrite')
 	      .objectStore(TB_NAME)
 	      .openCursor()
 	      .onsuccess = function (event) {
@@ -464,7 +467,11 @@
 	        key = cursor.value;
 	        if(key.scope==scope
 	          && key.version==version){
-	            results.push(cursor.value);
+	            if(Util.isNil(key.expires) || (now - key.create_date)>key.expires){
+	              cursor.delete();
+	            }else{
+	              results.push(key);
+	            }
 	        }
 	        cursor.continue();
 	      };
@@ -586,13 +593,28 @@
 	var Util = __webpack_require__(1);
 
 	module.exports = function (readyCallback) {
-	  var DB_NAME = 'DOMSnap_DB',
-	    DB_VERSION = 13,
+	  var self = this,
+	    DB_NAME = 'DOMSnap_DB',
+	    DB_VERSION = 19,
 	    TB_NAME = 'Snap',
 	    db;
 
 	  try {
-	    db = openDatabase(DB_NAME, DB_VERSION, DB_NAME, (5 * 1024 * 1024));
+	    db = openDatabase(DB_NAME, "", DB_NAME, (5 * 1024 * 1024));
+	    var v = db.version;
+	    if(v != DB_VERSION){
+	      db.changeVersion(v, DB_VERSION, function(){
+	        exe("DROP TABLE " + TB_NAME, []);
+	        install();
+	      });
+	    }else{
+	      install();
+	    }
+	  } catch (e) {
+	    console.log("WebSQL error: ", e);
+	  }
+
+	  function install() {
 	    exe("CREATE TABLE IF NOT EXISTS "+
 	      TB_NAME+
 	      "(id INTEGER PRIMARY KEY ASC, " +
@@ -601,13 +623,12 @@
 	      "capture_id TEXT, " +
 	      "scope TEXT, " +
 	      "version INTEGER, " +
+	      "expires INTEGER, " +
 	      "htm TEXT)",
 	      [], false, readyCallback);
-	  } catch (e) {
-	    console.log("WebSQL error: ", e);
 	  }
 
-	  function exe(query, data, returnFirst, callback) {
+	  function exe(query, data, returnFirst, callback, filter) {
 	    var i, l, remaining;
 
 	    if (!(data[0] instanceof Array)) {
@@ -622,7 +643,12 @@
 	      if (!remaining) {
 	        // HACK Convert row object to an array to make our lives easier
 	        for (i = 0, l = rs.rows.length; i < l; i = i + 1) {
-	          output.push(rs.rows.item(i));
+	          var item = rs.rows.item(i);
+	          if(Util.isFunction(filter)){
+	            filter(item) && output.push(item);
+	          }else{
+	            output.push(item);
+	          }
 	        }
 	        if (callback) {
 	          callback(returnFirst ? output[0] : output);
@@ -643,11 +669,11 @@
 	    });
 	  }
 
-	  this.add = function (selector, capture_id, htm, scope, version) {
+	  this.add = function (selector, capture_id, htm, scope, version, expires) {
 	    if(!Util.isNil(selector) && !Util.isNil(capture_id)){
 	      this.delete(selector, capture_id, scope, version,function(){
-	        exe("INSERT INTO "+TB_NAME+" (selector, capture_id, htm, scope, version, create_date) VALUES (?, ?, ?, ?, ?, ?);",
-	          [selector+'', capture_id+'', htm+'', scope+'', version, new Date()],
+	        exe("INSERT INTO "+TB_NAME+" (selector, capture_id, htm, scope, version, create_date, expires) VALUES (?, ?, ?, ?, ?, ?, ?);",
+	          [selector+'', capture_id+'', htm+'', scope+'', version, new Date(), expires || 0],
 	          false);
 	      });
 	    }
@@ -660,11 +686,24 @@
 	      callback);
 	  }
 
+	  this.deleteById = function (id) {
+	    exe("DELETE FROM "+TB_NAME+" WHERE id = ?",
+	      [id],
+	      false);
+	  }
+
 	  this.getAll = function (scope, version, callback) {
+	    var now = new Date().getTime();
 	    exe("SELECT * FROM "+TB_NAME+" WHERE scope = ? AND version = ?",
 	      [scope, version],
 	      false,
-	      callback);
+	      callback, function (key) {
+	        if(Util.isNil(key.expires) || (now - new Date(key.create_date).getTime())>(key.expires)){
+	          self.deleteById(key.id);
+	          return false;
+	        }
+	        return true;
+	      });
 	  }
 
 	  this.deleteAll = function (scope, version) {

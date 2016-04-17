@@ -9,6 +9,7 @@ capture snapshot html of the element matches the selector and store the result w
 -   `options` **object** [optional]
     -   `options.id` **string or function** capture id, if html is not null set id to null to store html as the default snapshot
     -   `options.html` **string or function** snapshot html, set id to null to store html as the default snapshot
+    -   `options.expires` **number** Milliseconds of how long the snapshot will expires. Same value as initialize DOMSnap if it's not specified.
 
 Returns **DOMSnap** 
 
@@ -35,6 +36,7 @@ Initialize DOMSnap
     -   `config.version` **number** Version control, Nonzero. Update is required if web app has been updated. Default is 1
     -   `config.scope` **string** "host|path|or any string value".  "host": location.host; "path": location.host+location.pathname; default is "path"
     -   `config.storeType` **string** Data store to use. "IndexedDB" or "WebSQL", if not defined, use "WebSQL" for iOS and "IndexedDB" for others.
+    -   `config.expires` **number** Milliseconds of how long every snapshot will expires, default is 1 week(1000_60_60_24_7).Note, new snapshots will never expires until the page reload.
 
 **Examples**
 
