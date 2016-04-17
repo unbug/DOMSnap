@@ -83,7 +83,7 @@ capture snapshot html of the element matches the selector and store the result w
 -   `options` **object** [optional]
     -   `options.id` **string or function** capture id, if html is not null set id to null to store html as the default snapshot
     -   `options.html` **string or function** snapshot html, set id to null to store html as the default snapshot
-    -   `options.expires` **number** Milliseconds of how long the snapshot will expires, Same value as initialize DOMSnap if it's not specified.
+    -   `options.expires` **number** Milliseconds of how long the snapshot will expires. Same value as initialize DOMSnap if it's not specified.
 
 Returns **DOMSnap** 
 
