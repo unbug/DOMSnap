@@ -180,6 +180,7 @@ Returns **DOMSnap**
 Roadmap & Make contributions
 ==============
  - **on-going** Auto watch and auto resume.
+ - Capture and resume script and css link.
  - Resume with DOM diff.
  - **on-going** Events(ready, before resume, after resume, before capture, after capture)
 
